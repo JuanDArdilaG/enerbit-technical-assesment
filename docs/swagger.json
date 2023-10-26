@@ -1,0 +1,414 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is a sample server for a Work Orders Service API.",
+        "title": "Work Orders Service API - EnerBit",
+        "contact": {
+            "name": "EnerBit"
+        },
+        "version": "0.1"
+    },
+    "host": "localhost:8888",
+    "basePath": "/v1",
+    "paths": {
+        "/customers": {
+            "post": {
+                "tags": [
+                    "customers"
+                ],
+                "summary": "Create a customer",
+                "parameters": [
+                    {
+                        "description": "Customer Info",
+                        "name": "message",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/customerscontrollers.CreateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/apperrors.JSONError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/apperrors.JSONError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/apperrors.JSONError"
+                        }
+                    }
+                }
+            }
+        },
+        "/customers/active": {
+            "get": {
+                "tags": [
+                    "customers"
+                ],
+                "summary": "Get all active customers",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/apperrors.JSONError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/apperrors.JSONError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/apperrors.JSONError"
+                        }
+                    }
+                }
+            }
+        },
+        "/workorders": {
+            "post": {
+                "tags": [
+                    "work_orders"
+                ],
+                "summary": "Create a work order",
+                "parameters": [
+                    {
+                        "description": "Work Order Info",
+                        "name": "message",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/workorderscontrollers.CreateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/apperrors.JSONError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/apperrors.JSONError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/apperrors.JSONError"
+                        }
+                    }
+                }
+            }
+        },
+        "/workorders/customer/{id}": {
+            "get": {
+                "tags": [
+                    "work_orders"
+                ],
+                "summary": "Get all work orders by customerID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Customer ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/apperrors.JSONError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/apperrors.JSONError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/apperrors.JSONError"
+                        }
+                    }
+                }
+            }
+        },
+        "/workorders/search": {
+            "get": {
+                "tags": [
+                    "work_orders"
+                ],
+                "summary": "Search work orders by date range and status",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Since date",
+                        "name": "since",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Until date",
+                        "name": "until",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Status",
+                        "name": "status",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/workorders.WorkOrder"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/apperrors.JSONError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/apperrors.JSONError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/apperrors.JSONError"
+                        }
+                    }
+                }
+            }
+        },
+        "/workorders/{id}/finish": {
+            "post": {
+                "tags": [
+                    "work_orders"
+                ],
+                "summary": "Finish a work order",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Order ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/apperrors.JSONError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/apperrors.JSONError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/apperrors.JSONError"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "apperrors.JSONError": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "customers.Customer": {
+            "type": "object",
+            "required": [
+                "address",
+                "first_name",
+                "last_name"
+            ],
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "end_date": {
+                    "type": "string"
+                },
+                "first_name": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "is_active": {
+                    "type": "boolean"
+                },
+                "last_name": {
+                    "type": "string"
+                },
+                "start_date": {
+                    "type": "string"
+                }
+            }
+        },
+        "customerscontrollers.CreateRequest": {
+            "type": "object",
+            "required": [
+                "address",
+                "first_name",
+                "last_name"
+            ],
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "first_name": {
+                    "type": "string"
+                },
+                "last_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "workorders.Status": {
+            "type": "string",
+            "enum": [
+                "new",
+                "done",
+                "cancelled"
+            ],
+            "x-enum-varnames": [
+                "StatusNew",
+                "StatusDone",
+                "StatusCancelled"
+            ]
+        },
+        "workorders.WorkOrder": {
+            "type": "object",
+            "required": [
+                "customer_id"
+            ],
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "customer": {
+                    "$ref": "#/definitions/customers.Customer"
+                },
+                "customer_id": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "planned_date_begin": {
+                    "type": "string"
+                },
+                "planned_date_end": {
+                    "type": "string"
+                },
+                "status": {
+                    "enum": [
+                        "new",
+                        "done",
+                        "cancelled"
+                    ],
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/workorders.Status"
+                        }
+                    ]
+                },
+                "title": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "minLength": 5
+                }
+            }
+        },
+        "workorderscontrollers.CreateRequest": {
+            "type": "object",
+            "required": [
+                "customer_id",
+                "planned_date_begin",
+                "planned_date_end"
+            ],
+            "properties": {
+                "customer_id": {
+                    "type": "string"
+                },
+                "planned_date_begin": {
+                    "type": "string"
+                },
+                "planned_date_end": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "minLength": 5
+                }
+            }
+        }
+    },
+    "externalDocs": {
+        "description": "OpenAPI",
+        "url": "https://swagger.io/resources/open-api/"
+    }
+}

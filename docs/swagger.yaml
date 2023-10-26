@@ -1,0 +1,273 @@
+basePath: /v1
+definitions:
+  apperrors.JSONError:
+    properties:
+      code:
+        type: integer
+      message:
+        type: string
+    type: object
+  customers.Customer:
+    properties:
+      address:
+        type: string
+      created_at:
+        type: string
+      end_date:
+        type: string
+      first_name:
+        type: string
+      id:
+        type: string
+      is_active:
+        type: boolean
+      last_name:
+        type: string
+      start_date:
+        type: string
+    required:
+    - address
+    - first_name
+    - last_name
+    type: object
+  customerscontrollers.CreateRequest:
+    properties:
+      address:
+        type: string
+      first_name:
+        type: string
+      last_name:
+        type: string
+    required:
+    - address
+    - first_name
+    - last_name
+    type: object
+  workorders.Status:
+    enum:
+    - new
+    - done
+    - cancelled
+    type: string
+    x-enum-varnames:
+    - StatusNew
+    - StatusDone
+    - StatusCancelled
+  workorders.WorkOrder:
+    properties:
+      created_at:
+        type: string
+      customer:
+        $ref: '#/definitions/customers.Customer'
+      customer_id:
+        type: string
+      id:
+        type: string
+      planned_date_begin:
+        type: string
+      planned_date_end:
+        type: string
+      status:
+        allOf:
+        - $ref: '#/definitions/workorders.Status'
+        enum:
+        - new
+        - done
+        - cancelled
+      title:
+        maxLength: 255
+        minLength: 5
+        type: string
+    required:
+    - customer_id
+    type: object
+  workorderscontrollers.CreateRequest:
+    properties:
+      customer_id:
+        type: string
+      planned_date_begin:
+        type: string
+      planned_date_end:
+        type: string
+      title:
+        maxLength: 255
+        minLength: 5
+        type: string
+    required:
+    - customer_id
+    - planned_date_begin
+    - planned_date_end
+    type: object
+externalDocs:
+  description: OpenAPI
+  url: https://swagger.io/resources/open-api/
+host: localhost:8888
+info:
+  contact:
+    name: EnerBit
+  description: This is a sample server for a Work Orders Service API.
+  title: Work Orders Service API - EnerBit
+  version: "0.1"
+paths:
+  /customers:
+    post:
+      parameters:
+      - description: Customer Info
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/customerscontrollers.CreateRequest'
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/apperrors.JSONError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/apperrors.JSONError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/apperrors.JSONError'
+      summary: Create a customer
+      tags:
+      - customers
+  /customers/active:
+    get:
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/apperrors.JSONError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/apperrors.JSONError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/apperrors.JSONError'
+      summary: Get all active customers
+      tags:
+      - customers
+  /workorders:
+    post:
+      parameters:
+      - description: Work Order Info
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/workorderscontrollers.CreateRequest'
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/apperrors.JSONError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/apperrors.JSONError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/apperrors.JSONError'
+      summary: Create a work order
+      tags:
+      - work_orders
+  /workorders/{id}/finish:
+    post:
+      parameters:
+      - description: Order ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/apperrors.JSONError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/apperrors.JSONError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/apperrors.JSONError'
+      summary: Finish a work order
+      tags:
+      - work_orders
+  /workorders/customer/{id}:
+    get:
+      parameters:
+      - description: Customer ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/apperrors.JSONError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/apperrors.JSONError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/apperrors.JSONError'
+      summary: Get all work orders by customerID
+      tags:
+      - work_orders
+  /workorders/search:
+    get:
+      parameters:
+      - description: Since date
+        in: query
+        name: since
+        type: string
+      - description: Until date
+        in: query
+        name: until
+        type: string
+      - description: Status
+        in: query
+        name: status
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/workorders.WorkOrder'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/apperrors.JSONError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/apperrors.JSONError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/apperrors.JSONError'
+      summary: Search work orders by date range and status
+      tags:
+      - work_orders
+swagger: "2.0"
