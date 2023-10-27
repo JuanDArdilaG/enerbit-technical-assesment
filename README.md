@@ -5,6 +5,8 @@ Create .env file with the following content:
 ```bash
 PORT=8888
 SQLITE_DB_NAME=main.db
+REDIS_WORKORDERS_CHANNEL=workorders
+REDIS_ADDR=localhost:6379
 ```
 
 Then run the following commands:
